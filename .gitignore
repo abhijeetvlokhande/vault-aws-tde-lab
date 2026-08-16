@@ -1,0 +1,9 @@
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
+*.hclic
+approle-role-id.txt
+approle-secret-id.txt
+*.pem
+.DS_Store
