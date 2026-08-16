@@ -280,7 +280,7 @@ GO</pre>
       <div class="beat">
         <div class="mark">SAY</div>
         <div class="content">
-          <p class="say">"Good — it just failed. That's not a bug, that's the proof. The key genuinely isn't cached anywhere useful on the SQL Server box. It's only in Vault. Now let's bring Vault back and show that recovery is clean, not a disaster."</p>
+          <p class="say">"Good — it just failed. That's not a bug, that's the proof. Taking the database offline and back online forces SQL Server to go re-fetch the key from Vault right now — and that's exactly the moment Vault being down actually matters. If we'd left the database running instead of cycling it, this outage wouldn't have touched it at all, because the key was already unwrapped and sitting in memory. Now let's bring Vault back and show that recovery is clean, not a disaster."</p>
         </div>
       </div>
       <div class="beat">
@@ -385,7 +385,7 @@ vault read transit/keys/ekm-encryption-key</pre>
       </div>
       <div class="qa-item">
         <div class="q">"What's the actual failure mode we should plan operational runbooks around?"</div>
-        <div class="a">A Vault outage means the database can't come back online until Vault is reachable again — walk through Act 2 again if this comes up live. It fails safely, but it is a real dependency your ops team needs to know about.</div>
+        <div class="a">A Vault outage doesn't affect a database that's already running — the key stays cached in memory. It only matters if the database needs to go through a restart, failover, or come back online while Vault happens to be down — walk through Act 2 again if this comes up live. That specific case fails safely, but it's a real dependency your ops team needs to plan around: Vault's own uptime becomes part of the database's effective availability during a restart or failover window.</div>
       </div>
       <div class="qa-item">
         <div class="q">"Is this the same thing as KMIP?"</div>

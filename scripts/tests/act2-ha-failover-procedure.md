@@ -24,9 +24,14 @@ ALTER DATABASE TestTDE SET ONLINE;
 GO
 ```
 Expect this to fail with a "Cannot open session for cryptographic
-provider" error (code 2050). This is the whole point of the test: the key
-genuinely lives in Vault, not cached anywhere useful. SQL Server reverts
-the database to offline rather than leaving it in a broken half-state.
+provider" error (code 2050). This is the whole point of the test: taking
+the database offline and back online forces SQL Server to re-fetch the DEK
+from Vault right now, which is why this specific action fails while Vault
+is down. It does not mean the key is never cached -- if the database had
+stayed running and never gone through this offline/online cycle, Vault
+being down wouldn't have affected it, since the key was already unwrapped
+and sitting in memory. SQL Server reverts the database to offline rather
+than leaving it in a broken half-state.
 
 ## 3. Bring Vault back and unseal it
 Still on the Vault host:

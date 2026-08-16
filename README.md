@@ -318,8 +318,7 @@ GO
 ALTER DATABASE TestTDE SET ONLINE;
 GO
 ```
-Expect this to fail -- that's the proof the key isn't cached anywhere
-useful outside Vault.
+Expect this to fail -- that's the proof the DEK genuinely has to be re-fetched from Vault at this specific moment (going offline and back online), not that the key is never cached. If the database had stayed running and never gone through this cycle, Vault being down wouldn't have affected it at all -- the key was already unwrapped and sitting in memory before Vault was stopped.
 
 Back on the Vault host:
 ```bash
