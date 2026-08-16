@@ -1,4 +1,4 @@
-# SQL Server TDE with HashiCorp Vault -- a hands-on lab
+# SQL Server TDE with HashiCorp Vault
 
 This lab builds a small, real environment on AWS so you can see, test, and
 break SQL Server's Transparent Data Encryption (TDE) when the encryption
